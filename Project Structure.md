@@ -11,7 +11,7 @@ CalendarDuration/
 │   │   │   │   │   ├── GoogleCalendarApi.kt
 │   │   │   │   ├── repository/
 │   │   │   │   │   ├── CalendarRepository.kt
-│   │   │   │   │   ├── CalendarRepositoryImpl.kt
+│   │   │   │   │   ├── CalendarRepositoryImplement.kt
 │   │   │   │   ├── ui/
 │   │   │   │   │   ├── components/
 │   │   │   │   │   │   ├── CalendarItem.kt
