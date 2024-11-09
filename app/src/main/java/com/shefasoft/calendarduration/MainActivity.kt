@@ -3,16 +3,7 @@ package com.shefasoft.calendarduration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.shefasoft.calendarduration.ui.screens.AnalysisScreen
-import com.shefasoft.calendarduration.ui.screens.HomeScreen
+import com.shefasoft.calendarduration.ui.components.DateSelector
 import com.shefasoft.calendarduration.ui.theme.CalendarDurationTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +12,7 @@ class MainActivity : ComponentActivity() {
         //enableEdgeToEdge()
         setContent {
             CalendarDurationTheme {
-                HomeScreen()
+                DateSelector()
             }
         }
     }
