@@ -1,15 +1,19 @@
 package com.shefasoft.calendarduration.ui.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,15 +43,16 @@ fun TimeTrackingCard() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Rotated Date on the Left Side
-            Text(
-                text = "Nov 05, 2024",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier
-                    .rotate(-90f)
-                    //.padding(end = 16.dp)
-            )
+//            Text(
+//                text = "Nov 05, 2024",
+//                fontSize = 18.sp,
+//                fontWeight = FontWeight.Bold,
+//                color = Color.Black,
+//                modifier = Modifier
+//                    .rotate(-90f)
+//                    //.padding(end = 16.dp)
+//            )
+            SimpleRotatedText("Nov 05, 2024")
 
             // Bar Chart with Time Labels on the Right
             Box(
@@ -60,16 +65,16 @@ fun TimeTrackingCard() {
             }
 
             // Time Labels on the Right
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.height(100.dp)
-            ) {
-                Text(text = "15h", fontSize = 12.sp, color = Color.Gray)
-                Text(text = "12h", fontSize = 12.sp, color = Color.Gray)
-                Text(text = "6h", fontSize = 12.sp, color = Color.Gray)
-                Text(text = "0h", fontSize = 12.sp, color = Color.Gray)
-            }
+//            Column(
+//                verticalArrangement = Arrangement.SpaceBetween,
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                modifier = Modifier.height(100.dp)
+//            ) {
+//                Text(text = "15h", fontSize = 12.sp, color = Color.Gray)
+//                Text(text = "12h", fontSize = 12.sp, color = Color.Gray)
+//                Text(text = "6h", fontSize = 12.sp, color = Color.Gray)
+//                Text(text = "0h", fontSize = 12.sp, color = Color.Gray)
+//            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -83,11 +88,12 @@ fun TimeTrackingCard() {
 }
 
 @Composable
-fun BarChart() {
+fun xxBarChart() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp),
+            .height(100.dp)
+            .horizontalScroll(rememberScrollState()),
         verticalAlignment = Alignment.Bottom
     ) {
         Bar(color = Color.Blue, heightFraction = 0.7f)
@@ -97,7 +103,78 @@ fun BarChart() {
         Bar(color = Color.Gray, heightFraction = 0.4f)
         Spacer(modifier = Modifier.width(8.dp))
         Bar(color = Color.Red, heightFraction = 0.3f)
-        
+        Spacer(modifier = Modifier.width(8.dp))
+
+    }
+}
+
+@Composable
+fun BarChart() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Container for the bar chart and line
+        Box(
+            modifier = Modifier
+                .weight(1f) // Occupies available width except for the labels
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 1.dp), // Space for the line below the bars
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .horizontalScroll(rememberScrollState()),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Bar(color = Color.Blue, heightFraction = 0.7f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color(0xFF388E3C), heightFraction = 0.5f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Gray, heightFraction = 0.4f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Red, heightFraction = 0.3f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Red, heightFraction = 0.3f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Red, heightFraction = 0.3f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Red, heightFraction = 0.3f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Red, heightFraction = 0.3f)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Bar(color = Color.Red, heightFraction = 0.3f)
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                }
+            }
+
+            // Line below the bar chart only, occupying full width of the bars
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color.LightGray)
+                    .align(Alignment.BottomCenter)
+            )
+        }
+
+        // Time labels on the right side
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.height(100.dp)
+        ) {
+            Text(text = "15h", fontSize = 12.sp, color = Color.Gray)
+            Text(text = "12h", fontSize = 12.sp, color = Color.Gray)
+            Text(text = "6h", fontSize = 12.sp, color = Color.Gray)
+            Text(text = "0h", fontSize = 12.sp, color = Color.Gray)
+        }
     }
 }
 
@@ -142,6 +219,32 @@ fun ActivityItem(color: Color, name: String, events: Int, time: String) {
             Text(text = "Event: $events", fontSize = 12.sp, color = Color.Gray)
         }
         Text(text = time, fontWeight = FontWeight.Bold)
+    }
+}
+
+
+
+@Composable
+fun SimpleRotatedText(text: String) {
+    Canvas(
+        modifier = Modifier
+            .height(100.dp) // Adjust the height to fit the text
+            .width(30.dp)   // Adjust the width for alignment control if necessary
+    ) {
+        val paint = Paint().asFrameworkPaint().apply {
+            color = android.graphics.Color.BLACK
+            textSize = 18.sp.toPx() // Convert sp to px for text size
+            isAntiAlias = true
+            textAlign = android.graphics.Paint.Align.CENTER
+        }
+
+        // Rotate the canvas before drawing the text
+        drawContext.canvas.nativeCanvas.apply {
+            save() // Save the current canvas state
+            rotate(-90f, size.width / 2, size.height / 2) // Rotate around the center
+            drawText(text, size.width / 2, size.height / 2, paint)
+            restore() // Restore the canvas to its original state
+        }
     }
 }
 
