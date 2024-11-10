@@ -36,6 +36,7 @@ fun HomeScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("Calendar Duration")
+
             }
         }, colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
