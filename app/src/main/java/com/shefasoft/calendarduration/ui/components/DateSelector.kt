@@ -33,7 +33,7 @@ fun DateSelector() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
             .background(Color.Transparent)
     ) {
         // Tab Row for Day, 3 Days, Week, etc.

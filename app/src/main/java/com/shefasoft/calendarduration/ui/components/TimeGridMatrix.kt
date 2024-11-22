@@ -20,7 +20,7 @@ fun TimeGridMatrix() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
+            .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp)) // Adds rounded corners
             .background(Color.White) // Background color to make the rounded corners visible
             .padding(16.dp) // Padding inside the rounded border
@@ -33,12 +33,11 @@ fun TimeGridMatrix() {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Grids", fontSize = 20.sp, color = Color.Black)
+                Text(text = "Time Grids", fontSize = 20.sp, color = Color.Black)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "👑", fontSize = 20.sp) // Crown emoji for demo purposes
             }
             Text(
-                text = "Displaying demo data, unlock pro to use!",
+                text = "Displaying cell based along with time",
                 fontSize = 14.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
@@ -54,24 +53,28 @@ fun TimeGridMatrix() {
                 }
             }
 
-            // Grid of time slots
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(24), // Define the number of columns
+            // Grid of time slots with constrained height
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .height(180.dp) // Constrain the height of the grid
             ) {
-                // Create 288 items (24 columns x 12 rows)
-                items(288) { index ->
-                    Box(
-                        modifier = Modifier
-                            .aspectRatio(1f) // Ensures the grid cells are square
-                            .padding(1.dp)
-                            .background(
-                                color = if (index in 0..285) Color(0xFF4CAF50) else Color(0xFFE0E0E0)
-                                // Highlight some cells
-                            )
-                    )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(24), // Define the number of columns
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    // Create 288 items (24 columns x 12 rows)
+                    items(288) { index ->
+                        Box(
+                            modifier = Modifier
+                                .aspectRatio(1f) // Ensures the grid cells are square
+                                .padding(1.dp)
+                                .background(
+                                    color = if (index in 0..285) Color(0xFF4CAF50) else Color(0xFFE0E0E0)
+                                    // Highlight some cells
+                                )
+                        )
+                    }
                 }
             }
 
@@ -91,7 +94,6 @@ fun TimeGridMatrix() {
         }
     }
 }
-
 
 @Composable
 @Preview(showBackground = true, backgroundColor = 0xFF4CAF50)

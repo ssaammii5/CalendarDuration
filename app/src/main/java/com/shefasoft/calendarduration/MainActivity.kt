@@ -3,7 +3,7 @@ package com.shefasoft.calendarduration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.shefasoft.calendarduration.ui.components.TimeGridMatrix
+import com.shefasoft.calendarduration.ui.screens.HomeScreen
 import com.shefasoft.calendarduration.ui.theme.CalendarDurationTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         //enableEdgeToEdge()
         setContent {
             CalendarDurationTheme {
-                TimeGridMatrix()
+                HomeScreen()
             }
         }
     }

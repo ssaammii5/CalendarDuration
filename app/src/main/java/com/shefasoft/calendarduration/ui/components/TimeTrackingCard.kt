@@ -90,26 +90,26 @@ fun TimeTrackingCard() {
     }
 }
 
-@Composable
-fun xxBarChart() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp)
-            .horizontalScroll(rememberScrollState()),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Bar(color = Color.Blue, heightFraction = 0.7f)
-        Spacer(modifier = Modifier.width(8.dp))
-        Bar(color = Color(0xFF388E3C), heightFraction = 0.5f)
-        Spacer(modifier = Modifier.width(8.dp))
-        Bar(color = Color.Gray, heightFraction = 0.4f)
-        Spacer(modifier = Modifier.width(8.dp))
-        Bar(color = Color.Red, heightFraction = 0.3f)
-        Spacer(modifier = Modifier.width(8.dp))
-
-    }
-}
+//@Composable
+//fun xxBarChart() {
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(100.dp)
+//            .horizontalScroll(rememberScrollState()),
+//        verticalAlignment = Alignment.Bottom
+//    ) {
+//        Bar(color = Color.Blue, heightFraction = 0.7f)
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Bar(color = Color(0xFF388E3C), heightFraction = 0.5f)
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Bar(color = Color.Gray, heightFraction = 0.4f)
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Bar(color = Color.Red, heightFraction = 0.3f)
+//        Spacer(modifier = Modifier.width(8.dp))
+//
+//    }
+//}
 
 @Composable
 fun BarChart() {
