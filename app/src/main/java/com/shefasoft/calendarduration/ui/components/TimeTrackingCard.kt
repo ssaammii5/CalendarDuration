@@ -1,6 +1,7 @@
 package com.shefasoft.calendarduration.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -14,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shefasoft.calendarduration.R
 
 @Composable
 fun TimeTrackingCard() {
@@ -218,7 +221,17 @@ fun ActivityItem(color: Color, name: String, events: Int, time: String) {
             Text(text = name, fontWeight = FontWeight.Bold)
             Text(text = "Event: $events", fontSize = 12.sp, color = Color.Gray)
         }
-        Text(text = time, fontWeight = FontWeight.Bold)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_clock_duration), // Replace with your vector drawable
+                contentDescription = "Time Icon",
+                modifier = Modifier.size(16.dp)
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(text = time, fontWeight = FontWeight.Bold)
+        }
+        //Text(text = time, fontWeight = FontWeight.Bold)
     }
 }
 

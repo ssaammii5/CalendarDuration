@@ -42,12 +42,13 @@ fun HomeScreen() {
             containerColor = Color.Transparent,
             titleContentColor = Color.Black
         ))
+
         DateSelector()
 
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     HomeScreen()

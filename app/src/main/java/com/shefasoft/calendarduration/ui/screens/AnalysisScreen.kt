@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -106,13 +105,13 @@ fun TaskDurationBarChartExample() {
     TaskDurationBarChart(tasks = tasks, colors = colors)
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun TaskDurationBarChartPreview() {
     TaskDurationBarChartExample()
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun AnalysisScreenPreview(){
     AnalysisScreen()
