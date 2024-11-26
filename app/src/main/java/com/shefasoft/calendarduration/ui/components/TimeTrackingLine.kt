@@ -1,4 +1,4 @@
-package com.shefasoft.calendarduration.ui.screens
+package com.shefasoft.calendarduration.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun AnalysisScreen(){
+fun TimeTrackingLine(){
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -37,12 +37,13 @@ fun AnalysisScreen(){
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "4h 30m", fontSize = 20.sp)
+                Text(text = "4h 30m", fontSize = 14.sp)
                 Spacer(modifier = Modifier.width(2.dp))
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                     contentDescription = "Arrow",
-                    tint = Color.Black
+                    tint = Color.Black,
+                    modifier = Modifier.size(14.dp)
                 )
             }
         }
@@ -107,12 +108,6 @@ fun TaskDurationBarChartExample() {
 
 @Preview(showBackground = true)
 @Composable
-fun TaskDurationBarChartPreview() {
-    TaskDurationBarChartExample()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AnalysisScreenPreview(){
-    AnalysisScreen()
+fun TimeTrackingLinePreview() {
+    TimeTrackingLine()
 }
