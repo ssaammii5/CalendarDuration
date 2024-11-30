@@ -1,6 +1,5 @@
 package com.shefasoft.calendarduration.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -26,24 +25,27 @@ fun EventActivityCard() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Activity List with Dividers
-        EAItemWithDivider(color = Color.Blue, name = "Activity", events = 5, time = "9h 45m")
-        EAItemWithDivider(color = Color(0xFF388E3C), name = "Study", events = 2, time = "7h 30m")
-        EAItemWithDivider(color = Color.Gray, name = "Procrastination", events = 1, time = "5h 15m")
-        EAItemWithDivider(color = Color.Red, name = "Programming", events = 2, time = "4h 30m")
+        EAItemWithDivider(color = Color.Blue, name = "Lunch", calendar_name = "Activity", time = "9h 45m",  timeframe = "10:30 AM - 12:00 PM")
+        EAItemWithDivider(color = Color(0xFF388E3C), name = "Mathematics", calendar_name = "Study", time = "7h 30m", timeframe = "09:15 AM - 12:45 PM")
+        EAItemWithDivider(color = Color.Gray, name = "Facebook", calendar_name = "Procrastination", time = "5h 15m", timeframe = "08:00 AM - 09:30 AM")
+        EAItemWithDivider(color = Color.Red, name = "Programming", calendar_name = "CP", time = "4h 30m", timeframe = "07:30 AM - 08:00 PM")
+        EAItemWithDivider(color = Color(0xFF388E3C), name = "Biology", calendar_name = "Study", time = "7h 30m", timeframe = "09:15 AM - 12:45 PM")
+        EAItemWithDivider(color = Color.Blue, name = "Dinner", calendar_name = "Activity", time = "9h 45m", timeframe = "10:30 AM - 12:00 PM")
     }
 }
 
 
-
-
 @Composable
-fun EAItemWithDivider(color: Color, name: String, events: Int, time: String) {
+fun EAItemWithDivider(color: Color, name: String, calendar_name: String, time: String, timeframe:
+String) {
     Column {
-        EventActivityItem(color = color, name = name, events = events, time = time)
+        EventActivityItem(
+            color = color,
+            name = name,
+            calendar_name = calendar_name,
+            time = time,
+            timeframe = timeframe
+        )
         HorizontalDivider(
             color = Color.LightGray,
             thickness = 1.dp,
@@ -53,7 +55,8 @@ fun EAItemWithDivider(color: Color, name: String, events: Int, time: String) {
 }
 
 @Composable
-fun EventActivityItem(color: Color, name: String, events: Int, time: String) {
+fun EventActivityItem(color: Color, name: String, calendar_name: String, time: String, timeframe:
+String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,14 +72,14 @@ fun EventActivityItem(color: Color, name: String, events: Int, time: String) {
         Column(modifier = Modifier.weight(1f)) {
             Text(text = name, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = "Event: $events", fontSize = 12.sp, color = Color.Gray)
+            Text(text = calendar_name, fontSize = 12.sp, color = Color.Gray)
         }
         Column(
             horizontalAlignment = Alignment.End
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_clock_duration), // Replace with your vector drawable
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_clock_duration),
                     contentDescription = "Time Icon",
                     modifier = Modifier.size(16.dp)
                 )
@@ -85,11 +88,10 @@ fun EventActivityItem(color: Color, name: String, events: Int, time: String) {
                 Text(text = time, fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = "10:30 AM - 12:00 PM", fontWeight = FontWeight.Normal, color = Color.Gray)
+            Text(text = timeframe, fontWeight = FontWeight.Normal, color = Color.Gray)
         }
     }
 }
-
 
 
 @Composable

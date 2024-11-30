@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,13 +45,21 @@ fun LoginScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground), // Replace with your calendar icon
-                contentDescription = "Calendar Icon",
-                tint = Color(0xFF8BC34A), // Green color
-                modifier = Modifier.size(64.dp)
+            Image(
+                painter = painterResource(id = R.mipmap.ick), // Replace with your image resource
+                contentDescription = "Calendar Image",
+                modifier = Modifier
+                    .size(80.dp)
+                    .graphicsLayer(
+                        shadowElevation = 70f, // Apply the elevation to create a shadow
+                        shape = RectangleShape, // Optional: Use a shape (optional for the shadow)
+                        clip = false // Don't clip, keeping original shape (important for non-rectangular images)
+                    )
             )
-            Spacer(modifier = Modifier.height(32.dp))
+
+
+
+            Spacer(modifier = Modifier.height(64.dp))
             Button(
                 onClick = { /* Handle Google Sign-in */ },
                 colors = ButtonDefaults.buttonColors(Color.White),

@@ -22,7 +22,7 @@ fun HomeScreen() {
 
     Column(
         modifier = Modifier
-            .background(Color.LightGray)
+            .background(Color(0xFFEEEEEE))
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
