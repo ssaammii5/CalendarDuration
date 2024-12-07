@@ -2,7 +2,8 @@ package com.shefasoft.calendarduration.ui.navigation
 
 import kotlinx.serialization.Serializable
 
-sealed class Destinations(){
+@Serializable
+sealed class Destinations{
     @Serializable
     object HomeScreen
     @Serializable

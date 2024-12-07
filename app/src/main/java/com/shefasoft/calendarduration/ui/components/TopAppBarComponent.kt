@@ -12,25 +12,41 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.shefasoft.calendarduration.R
+import com.shefasoft.calendarduration.ui.navigation.Destinations
 
 @Composable
-fun TopAppBarComponent() {
+fun TopAppBarComponent(
+    navController: NavController,
+    isSelected: Boolean,
+    headingText: String
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination
+    val destRoutes = listOf(
+        Destinations.HomeScreen,
+        Destinations.EventDetailScreen,
+        Destinations.SettingsScreen
+    )
+    val isSelected = currentRoute?.hierarchy?.any { it == Destinations.SettingsScreen } == true
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Calendar Duration",
+            text = headingText,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.weight(1f)
         )
@@ -39,33 +55,67 @@ fun TopAppBarComponent() {
         ) {
             IconButtonWithHighlight(
                 icon = R.drawable.ic_calendars,
-                isSelected = true // First button is selected
+                isSelected = isSelected,
+                onClick = {
+                    if (!isSelected) {
+                        navController.navigate(Destinations.HomeScreen) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                }
             )
             IconButtonWithHighlight(
                 icon = R.drawable.ic_clock_duration,
-                isSelected = false
+                isSelected = isSelected,
+                onClick = {
+                    if (!isSelected) {
+                        navController.navigate(Destinations.EventDetailScreen) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                }
             )
             IconButtonWithHighlight(
                 icon = R.drawable.ic_settings,
-                isSelected = false
+                //isSelected = currentRoute?.hierarchy?.any { it == Destinations.SettingsScreen } == true,
+                isSelected = isSelected,
+                onClick = {
+                    if (!isSelected) {
+                        navController.navigate(Destinations.SettingsScreen) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                }
             )
         }
     }
 }
 
 @Composable
-fun IconButtonWithHighlight(icon: Int, isSelected: Boolean) {
+fun IconButtonWithHighlight(icon: Int, isSelected: Boolean, onClick: () -> Unit) {
     IconButton(
-        onClick = { /* Handle click */ },
+        onClick = onClick,
         modifier = Modifier
             .background(
-            color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) else Color
-                .Transparent,
-            shape = RoundedCornerShape(40)
-        )
+                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.2f) else Color
+                    .Transparent,
+                shape = RoundedCornerShape(40)
+            )
     ) {
         Icon(
-            painter= painterResource(id = icon),
+            painter = painterResource(id = icon),
             contentDescription = null,
             modifier = Modifier.size(24.dp),
             tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme
@@ -74,8 +124,8 @@ fun IconButtonWithHighlight(icon: Int, isSelected: Boolean) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewTopAppBarComponent() {
-    TopAppBarComponent()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewTopAppBarComponent() {
+//    TopAppBarComponent(navController)
+//}

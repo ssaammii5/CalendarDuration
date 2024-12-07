@@ -34,21 +34,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.R
-import com.shefasoft.calendarduration.ui.components.TopAppBarComponent
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(modifier: Modifier = Modifier) {
     Column(
+        modifier = modifier
     ) {
-        TopAppBarComponent()
         ProfileScreen()
     }
-
-
 }
 
 @Composable
@@ -56,7 +52,6 @@ fun ProfileScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)) // Light grey background
             .padding(horizontal = 16.dp)
     ) {
         // Top Section: Profile Info
@@ -157,7 +152,7 @@ fun ProfileScreen() {
                 color = Color.Gray
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Row (
+            Row(
                 modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -210,8 +205,8 @@ fun AboutItem(icon: ImageVector, title: String) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewSettingsScreen() {
-    SettingsScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewSettingsScreen() {
+//    SettingsScreen()
+//}
