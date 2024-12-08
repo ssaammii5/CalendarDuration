@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.shefasoft.calendarduration.R
 import com.shefasoft.calendarduration.ui.navigation.Destinations
@@ -37,7 +36,7 @@ fun TopAppBarComponent(
         Destinations.EventDetailScreen,
         Destinations.SettingsScreen
     )
-    val isSelected = currentRoute?.hierarchy?.any { it == Destinations.SettingsScreen } == true
+
     Row(
         modifier = Modifier
             .fillMaxWidth()

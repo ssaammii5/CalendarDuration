@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     topBar = {
-                        TopAppBarMenu(navController, true)
+                        TopAppBarMenu(navController)
                     },
                 ) { innerPadding ->
                     NavHost(
