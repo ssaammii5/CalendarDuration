@@ -21,7 +21,7 @@ fun EventActivityCard() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .background(Color(0xFFF5F5F5), shape = MaterialTheme.shapes.medium)
+            .background(Color.White, shape = MaterialTheme.shapes.medium)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
