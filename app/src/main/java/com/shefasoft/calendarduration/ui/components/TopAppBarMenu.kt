@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -38,7 +39,7 @@ fun TopAppBarMenu(
     TopAppBar(
         title = {
             Text(
-                text = "Calendar Duration"
+                text = getTopAppBarTitle(backStackEntry)
             )
         },
         actions = {
@@ -110,5 +111,17 @@ fun IconButtonWithHighlights(icon: Int, isSelected: Boolean, onClick: () -> Unit
             tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme
                 .onSurface
         )
+    }
+}
+
+
+private fun getTopAppBarTitle(entry: NavBackStackEntry?): String {
+    val destination = entry?.destination
+    return when {
+        destination == null -> ""
+        destination.hasRoute<Destinations.HomeScreen>() -> "Calendar Duration"
+        destination.hasRoute<Destinations.EventDetailScreen>() -> "Events"
+        destination.hasRoute<Destinations.SettingsScreen>() -> "Settings"
+        else -> ""
     }
 }

@@ -72,7 +72,7 @@ String) {
         Column(modifier = Modifier.weight(1f)) {
             Text(text = name, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = calendar_name, fontSize = 12.sp, color = Color.Gray)
+            Text(text = calendar_name, fontSize = 14.sp, color = Color.Gray)
         }
         Column(
             horizontalAlignment = Alignment.End
@@ -88,7 +88,7 @@ String) {
                 Text(text = time, fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = timeframe, fontWeight = FontWeight.Normal, color = Color.Gray)
+            Text(text = timeframe,fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Gray)
         }
     }
 }
