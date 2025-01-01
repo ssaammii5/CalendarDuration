@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,10 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Share
@@ -25,6 +23,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -59,7 +58,7 @@ fun ProfileScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp))
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -67,36 +66,36 @@ fun ProfileScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Profile Picture
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            Color(0xFF8BC34A),
-                            shape = CircleShape
-                        ), // Circle background color
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "M",
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+//                // Profile Picture
+//                Box(
+//                    modifier = Modifier
+//                        .size(48.dp)
+//                        .background(
+//                            Color(0xFF8BC34A),
+//                            shape = CircleShape
+//                        ), // Circle background color
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(
+//                        text = "M",
+//                        color = Color.White,
+//                        fontSize = 24.sp,
+//                        fontWeight = FontWeight.Bold
+//                    )
+//                }
                 Spacer(modifier = Modifier.width(16.dp))
                 // User Info
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "Md. Samiur Rahman",
+                        text = "Import Calendars",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         color = Color.Black
                     )
                     Text(
-                        text = "mdsamiur5@gmail.com",
+                        text = "Number of Calendars: 5",
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -111,7 +110,7 @@ fun ProfileScreen() {
                     border = BorderStroke(1.dp, Color.Red),
                     shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text(text = "Log out")
+                    Text(text = "Import")
                 }
             }
         }
@@ -122,7 +121,7 @@ fun ProfileScreen() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp))
                 .padding(16.dp)
         ) {
             Text(
@@ -159,7 +158,7 @@ fun ProfileScreen() {
                 Text(
                     text = "By ",
                     fontSize = 12.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
                 Image(
@@ -196,7 +195,7 @@ fun AboutItem(icon: ImageVector, title: String) {
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            imageVector = Icons.Default.ArrowForward,
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
             tint = Color.Gray,
             modifier = Modifier.size(16.dp)
