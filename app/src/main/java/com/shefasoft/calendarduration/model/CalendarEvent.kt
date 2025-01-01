@@ -1,12 +1,11 @@
 package com.shefasoft.calendarduration.model
 
-import java.time.Duration
-import java.time.LocalDateTime
-
 data class CalendarEvent(
-    val id: String,
     val title: String,
-    val startTime: LocalDateTime,
-    val endTime: LocalDateTime,
-    val duration: Duration
+    val calendarName: String,
+    val startTime: String,
+    val endTime: String,
+    val description: String?,
+    val location: String?,
+    val color: Int?
 )
