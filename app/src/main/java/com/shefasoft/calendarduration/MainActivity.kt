@@ -1,4 +1,3 @@
-// this is a revert testing
 package com.shefasoft.calendarduration
 
 import android.os.Bundle
