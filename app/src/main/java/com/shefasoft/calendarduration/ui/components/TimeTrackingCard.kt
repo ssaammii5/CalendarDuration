@@ -17,13 +17,13 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.R
+import com.shefasoft.calendarduration.viewModel.MainViewModel
 
 @Composable
-fun TimeTrackingCard() {
+fun TimeTrackingCard(viewModel: MainViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -261,8 +261,8 @@ fun SimpleRotatedText(text: String) {
     }
 }
 
-@Composable
-@Preview
-fun TimeTrackingCardPreview() {
-    TimeTrackingCard()
-}
+//@Composable
+//@Preview
+//fun TimeTrackingCardPreview() {
+//    TimeTrackingCard()
+//}

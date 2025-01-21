@@ -12,16 +12,19 @@ import androidx.compose.ui.unit.dp
 import com.shefasoft.calendarduration.ui.components.DateSelector
 import com.shefasoft.calendarduration.ui.components.TimeGridMatrix
 import com.shefasoft.calendarduration.ui.components.TimeTrackingCard
+import com.shefasoft.calendarduration.viewModel.MainViewModel
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         DateSelector()
-        TimeTrackingCard()
+        TimeTrackingCard(
+            viewModel = viewModel
+        )
         TimeGridMatrix()
         Spacer(Modifier.padding(vertical = 16.dp))
     }

@@ -2,6 +2,7 @@ package com.shefasoft.calendarduration.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -10,14 +11,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.R
+import com.shefasoft.calendarduration.model.CalendarEvent
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
-fun EventActivityCard() {
-    Column(
+fun EventActivityCard(events: List<CalendarEvent>) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(16.dp)
+//            .background(Color.White, shape = MaterialTheme.shapes.medium)
+//            .padding(16.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        EAItemWithDivider(color = Color.Blue, name = "Lunch", calendar_name = "Activity", time = "9h 45m",  timeframe = "10:30 AM - 12:00 PM")
+//        EAItemWithDivider(color = Color(0xFF388E3C), name = "Mathematics", calendar_name = "Study", time = "7h 30m", timeframe = "09:15 AM - 12:45 PM")
+//        EAItemWithDivider(color = Color.Gray, name = "Facebook", calendar_name = "Procrastination", time = "5h 15m", timeframe = "08:00 AM - 09:30 AM")
+//        EAItemWithDivider(color = Color.Red, name = "Programming", calendar_name = "CP", time = "4h 30m", timeframe = "07:30 AM - 08:00 PM")
+//        EAItemWithDivider(color = Color(0xFF388E3C), name = "Biology", calendar_name = "Study", time = "7h 30m", timeframe = "09:15 AM - 12:45 PM")
+//        EAItemWithDivider(color = Color.Blue, name = "Dinner", calendar_name = "Activity", time = "9h 45m", timeframe = "10:30 AM - 12:00 PM")
+//    }
+    LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
@@ -25,24 +46,31 @@ fun EventActivityCard() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        EAItemWithDivider(color = Color.Blue, name = "Lunch", calendar_name = "Activity", time = "9h 45m",  timeframe = "10:30 AM - 12:00 PM")
-        EAItemWithDivider(color = Color(0xFF388E3C), name = "Mathematics", calendar_name = "Study", time = "7h 30m", timeframe = "09:15 AM - 12:45 PM")
-        EAItemWithDivider(color = Color.Gray, name = "Facebook", calendar_name = "Procrastination", time = "5h 15m", timeframe = "08:00 AM - 09:30 AM")
-        EAItemWithDivider(color = Color.Red, name = "Programming", calendar_name = "CP", time = "4h 30m", timeframe = "07:30 AM - 08:00 PM")
-        EAItemWithDivider(color = Color(0xFF388E3C), name = "Biology", calendar_name = "Study", time = "7h 30m", timeframe = "09:15 AM - 12:45 PM")
-        EAItemWithDivider(color = Color.Blue, name = "Dinner", calendar_name = "Activity", time = "9h 45m", timeframe = "10:30 AM - 12:00 PM")
+        items(events.size) { index ->
+            val event = events[index]
+            val duration = calculateDuration(event.startTime, event.endTime)
+            EAItemWithDivider(
+                color = Color(event.color ?: 0),
+                name = event.title,
+                calendarName = event.calendarName,
+                time = duration,
+                timeframe = "${formatTime(event.startTime)} - ${formatTime(event.endTime)}"
+            )
+        }
     }
 }
 
 
 @Composable
-fun EAItemWithDivider(color: Color, name: String, calendar_name: String, time: String, timeframe:
-String) {
+fun EAItemWithDivider(
+    color: Color, name: String, calendarName: String, time: String, timeframe:
+    String
+) {
     Column {
         EventActivityItem(
             color = color,
             name = name,
-            calendar_name = calendar_name,
+            calendar_name = calendarName,
             time = time,
             timeframe = timeframe
         )
@@ -55,8 +83,10 @@ String) {
 }
 
 @Composable
-fun EventActivityItem(color: Color, name: String, calendar_name: String, time: String, timeframe:
-String) {
+fun EventActivityItem(
+    color: Color, name: String, calendar_name: String, time: String, timeframe:
+    String
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,9 +100,9 @@ String) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = name, fontWeight = FontWeight.Bold)
+            Text(text = name, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = calendar_name, fontSize = 14.sp, color = Color.Gray)
+            Text(text = calendar_name, fontSize = 14.sp, color = Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Column(
             horizontalAlignment = Alignment.End
@@ -88,14 +118,55 @@ String) {
                 Text(text = time, fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = timeframe,fontSize = 14.sp, fontWeight = FontWeight.Normal, color = Color.Gray)
+            Text(
+                text = timeframe,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Gray
+            )
         }
     }
 }
 
+//
+//@Composable
+//@Preview
+//fun EventActivityCardPreview() {
+//    EventActivityCard()
+//}
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun EventActivityCardPreview() {
-    EventActivityCard()
+    EventActivityCard(
+        events = listOf(
+            CalendarEvent(
+                color = 0xFF388E3C.toInt(),
+                title = "Long Event Name That Might Cause Problems",
+                calendarName = "A Very Long Calendar Name That Should Be Truncated",
+                startTime = "10:00 AM",
+                endTime = "12:00 PM",
+                description = "This is a sample description for the event.",
+                location = "Sample Location"
+            )
+        )
+    )
+}
+
+fun formatTime(dateTime: String): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss") // Input format
+    val outputFormatter = DateTimeFormatter.ofPattern("hh:mm a") // Desired output format
+    val parsedDateTime = LocalDateTime.parse(dateTime, inputFormatter)
+    return parsedDateTime.format(outputFormatter)
+}
+
+fun calculateDuration(startTime: String, endTime: String): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val start = LocalDateTime.parse(startTime, inputFormatter)
+    val end = LocalDateTime.parse(endTime, inputFormatter)
+    val duration = Duration.between(start, end)
+
+    val hours = duration.toHours()
+    val minutes = duration.toMinutes() % 60
+    return "${hours}h ${minutes}m"
 }
