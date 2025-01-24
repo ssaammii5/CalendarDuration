@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.shefasoft.calendarduration.ui.components.DateSelector
 import com.shefasoft.calendarduration.ui.components.EventActivityCard
@@ -14,11 +16,14 @@ import com.shefasoft.calendarduration.viewModel.UiState
 @Composable
 fun EventDetailsScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val uiState = viewModel.uiState.value
+    val selectedDate = remember { mutableStateOf("") }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Top
     ) {
-        DateSelector()
+        DateSelector{ date ->
+            selectedDate.value = date
+        }
         TimeTrackingLine()
         if (uiState is UiState.ShowEventsList) {
             EventActivityCard(events = uiState.events)

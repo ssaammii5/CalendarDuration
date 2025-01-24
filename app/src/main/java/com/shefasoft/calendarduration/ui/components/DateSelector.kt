@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.ui.theme.greenTextSelected
@@ -35,7 +34,7 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun DateSelector() {
+fun DateSelector(onDateSelected: (String) -> Unit) {
     val calendar = remember { Calendar.getInstance() }
     val dateState = remember { mutableStateOf(getFormattedDate(calendar)) }
     val context = LocalContext.current
@@ -73,6 +72,7 @@ fun DateSelector() {
                 // Handle Previous Date
                 calendar.add(Calendar.DAY_OF_MONTH, -1)
                 dateState.value = getFormattedDate(calendar)
+                onDateSelected(dateState.value) // Notify parent
             }) {
                 Icon(Icons.AutoMirrored.Default.KeyboardArrowLeft, contentDescription = "Previous")
             }
@@ -87,6 +87,7 @@ fun DateSelector() {
                     .clickable {
                         showDatePicker(context, calendar) {
                             dateState.value = getFormattedDate(calendar)
+                            onDateSelected(dateState.value) // Notify parent
                         }
                     }
             )
@@ -95,6 +96,7 @@ fun DateSelector() {
                 // Handle Next Date
                 calendar.add(Calendar.DAY_OF_MONTH, 1)
                 dateState.value = getFormattedDate(calendar)
+                onDateSelected(dateState.value) // Notify parent
             }) {
                 Icon(Icons.AutoMirrored.Default.KeyboardArrowRight, contentDescription = "Next")
             }
@@ -143,8 +145,9 @@ fun showDatePicker(
     ).show()
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewDateSelector() {
-    DateSelector()
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewDateSelector() {
+//    DateSelector()
+//}
