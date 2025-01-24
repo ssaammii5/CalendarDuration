@@ -66,7 +66,10 @@ object CalendarUtils {
         return calendarList
     }
 
-    fun getCalendarEvents(contentResolver: ContentResolver, selectedCalendars: Set<Long>): List<CalendarEvent> {
+    fun getCalendarEvents(
+        contentResolver: ContentResolver,
+        selectedCalendars: Set<Long>
+    ): List<CalendarEvent> {
         val eventList = mutableListOf<CalendarEvent>()
 
         if (selectedCalendars.isEmpty()) return eventList
@@ -103,6 +106,23 @@ object CalendarUtils {
             }
         }
 
+        // === NEW: Compute today's start and end times ===
+        val calendar = Calendar.getInstance()
+        // Start of day
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfDay = calendar.timeInMillis
+
+        // End of day
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        val endOfDay = calendar.timeInMillis
+        // ================================================
+
         val uri = CalendarContract.Events.CONTENT_URI
         val projection = arrayOf(
             CalendarContract.Events._ID,
@@ -115,14 +135,30 @@ object CalendarUtils {
         )
 
         val calendarIdPlaceholders = selectedCalendars.joinToString(",") { "?" }
-        val selection = "${CalendarContract.Events.CALENDAR_ID} IN ($calendarIdPlaceholders)"
-        val selectionArgs = selectedCalendars.map { it.toString() }.toTypedArray()
+
+        /**
+         * CHANGED:
+         * Added additional conditions to fetch only events between startOfDay and endOfDay.
+         */
+        val selection = """
+            ${CalendarContract.Events.CALENDAR_ID} IN ($calendarIdPlaceholders)
+            AND ${CalendarContract.Events.DTSTART} >= ?
+            AND ${CalendarContract.Events.DTSTART} <= ?
+        """.trimIndent()
+
+        val selectionArgs = selectedCalendars.map { it.toString() } + listOf(
+            startOfDay.toString(),
+            endOfDay.toString()
+        )
+
+        //val selection = "${CalendarContract.Events.CALENDAR_ID} IN ($calendarIdPlaceholders)"
+        //val selectionArgs = selectedCalendars.map { it.toString() }.toTypedArray()
 
         val cursor = contentResolver.query(
             uri,
             projection,
             selection,
-            selectionArgs,
+            selectionArgs.toTypedArray(),
             "${CalendarContract.Events.DTSTART} DESC"
         )
 
