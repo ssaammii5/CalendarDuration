@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -49,20 +47,20 @@ fun DateSelector() {
             .background(Color.Transparent)
     ) {
         // Tab Row for Day, Week, etc.
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, Color.Black, shape = RoundedCornerShape(50))
-                .padding(horizontal = 0.dp, vertical = 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TabItem("Day", selected = true)
-            TabItem("Week", selected = false)
-            TabItem("Month", selected = false)
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .border(1.dp, Color.Black, shape = RoundedCornerShape(50))
+//                .padding(horizontal = 0.dp, vertical = 0.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            TabItem("Day", selected = true)
+//            TabItem("Week", selected = false)
+//            TabItem("Month", selected = false)
+//        }
+//
+//        Spacer(modifier = Modifier.height(16.dp))
 
         // Date Selector Row with arrows and date
         Row(
