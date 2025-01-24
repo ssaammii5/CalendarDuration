@@ -43,7 +43,7 @@ class MainViewModel(private val repository: CalendarRepository) : ViewModel() {
     fun handlePermissionResult(isGranted: Boolean) {
         if (isGranted) {
             viewModelScope.launch {
-                proceedAfterPermission()
+                checkAndProceed()
             }
         } else {
             uiState.value = UiState.ShowError(
