@@ -5,15 +5,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shefasoft.calendarduration.repository.CalendarRepository
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class MainViewModel(private val repository: CalendarRepository) : ViewModel() {
 
     val uiState = mutableStateOf<UiState>(UiState.Loading)
+    private val _selectedDate = mutableStateOf(Calendar.getInstance())
+    val selectedDate = _selectedDate
 
     init {
         viewModelScope.launch {
             checkAndProceed()
         }
+    }
+
+    fun updateSelectedDate(calendar: Calendar) {
+        _selectedDate.value = calendar
     }
 
     private suspend fun checkAndProceed() {
@@ -85,19 +92,38 @@ class MainViewModel(private val repository: CalendarRepository) : ViewModel() {
         viewModelScope.launch {
             repository.clearSelectedCalendars()
             repository.insertSelectedCalendars(selectedCalendarIds.toList())
-            loadCalendarEvents()
+            loadCalendarEvents() // Initial load with current date
         }
     }
 
-    private suspend fun loadCalendarEvents() {
+    fun loadCalendarEvents() {
+        viewModelScope.launch {
+            _loadCalendarEvents()
+        }
+    }
+
+    private suspend fun _loadCalendarEvents() {
         val selectedCalendars = repository.getSelectedCalendars().toSet()
         if (selectedCalendars.isEmpty()) return
 
-        val events = repository.getCalendarEvents(selectedCalendars)
-        if (uiState.value !is UiState.ShowEventsList) {
-            uiState.value = UiState.ShowEventsList(events)
-        }
+        // Get start/end of currently selected date
+        val calendar = selectedDate.value.clone() as Calendar
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfDay = calendar.timeInMillis
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        val endOfDay = calendar.timeInMillis
+
+        val events = repository.getCalendarEvents(selectedCalendars, startOfDay, endOfDay)
+        uiState.value = UiState.ShowEventsList(events)
     }
+
 
     fun reselect() {
         viewModelScope.launch {

@@ -44,8 +44,7 @@ class CalendarRepository(private val calendarDao: CalendarDao, private val conte
     suspend fun getCalendarsForEmail(email: String): List<CalendarInfo> = withContext(Dispatchers.IO) {
         CalendarUtils.getCalendarsForEmail(contentResolver, email)
     }
-
-    suspend fun getCalendarEvents(selectedCalendars: Set<Long>): List<CalendarEvent> = withContext(Dispatchers.IO) {
-        CalendarUtils.getCalendarEvents(contentResolver, selectedCalendars)
+    suspend fun getCalendarEvents(selectedCalendars: Set<Long>, startTime: Long, endTime: Long): List<CalendarEvent> = withContext(Dispatchers.IO) {
+        CalendarUtils.getCalendarEvents(contentResolver, selectedCalendars, startTime, endTime)
     }
 }

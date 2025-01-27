@@ -68,7 +68,9 @@ object CalendarUtils {
 
     fun getCalendarEvents(
         contentResolver: ContentResolver,
-        selectedCalendars: Set<Long>
+        selectedCalendars: Set<Long>,
+        startTime: Long,
+        endTime: Long
     ): List<CalendarEvent> {
         val eventList = mutableListOf<CalendarEvent>()
 
@@ -147,12 +149,9 @@ object CalendarUtils {
         """.trimIndent()
 
         val selectionArgs = selectedCalendars.map { it.toString() } + listOf(
-            startOfDay.toString(),
-            endOfDay.toString()
+            startTime.toString(),
+            endTime.toString()
         )
-
-        //val selection = "${CalendarContract.Events.CALENDAR_ID} IN ($calendarIdPlaceholders)"
-        //val selectionArgs = selectedCalendars.map { it.toString() }.toTypedArray()
 
         val cursor = contentResolver.query(
             uri,

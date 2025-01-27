@@ -1,6 +1,7 @@
 package com.shefasoft.calendarduration.ui.components
 
 import android.app.DatePickerDialog
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +34,13 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun DateSelector(onDateSelected: (String) -> Unit) {
-    val calendar = remember { Calendar.getInstance() }
-    val dateState = remember { mutableStateOf(getFormattedDate(calendar)) }
+fun DateSelector(
+    selectedDate: Calendar,
+    onDateSelected: (Calendar) -> Unit
+) {
+    val dateText = remember(selectedDate.timeInMillis) {
+        getFormattedDate(selectedDate)
+    }
     val context = LocalContext.current
 
     Column(
@@ -70,33 +74,35 @@ fun DateSelector(onDateSelected: (String) -> Unit) {
         ) {
             IconButton(onClick = {
                 // Handle Previous Date
-                calendar.add(Calendar.DAY_OF_MONTH, -1)
-                dateState.value = getFormattedDate(calendar)
-                onDateSelected(dateState.value) // Notify parent
+                val newDate = selectedDate.clone() as Calendar
+                newDate.add(Calendar.DAY_OF_MONTH, -1)
+                onDateSelected(newDate)
             }) {
                 Icon(Icons.AutoMirrored.Default.KeyboardArrowLeft, contentDescription = "Previous")
             }
 
             Text(
-                text = dateState.value,
+                text = dateText,
                 fontSize = 18.sp,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .border(1.dp, Color.Black, RoundedCornerShape(50))
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .clickable {
-                        showDatePicker(context, calendar) {
-                            dateState.value = getFormattedDate(calendar)
-                            onDateSelected(dateState.value) // Notify parent
+                        showDatePicker(
+                            context = context,
+                            calendar = selectedDate.clone() as Calendar
+                        ) { chosenCalendar ->
+                            onDateSelected(chosenCalendar)
                         }
                     }
             )
 
             IconButton(onClick = {
                 // Handle Next Date
-                calendar.add(Calendar.DAY_OF_MONTH, 1)
-                dateState.value = getFormattedDate(calendar)
-                onDateSelected(dateState.value) // Notify parent
+                val newDate = selectedDate.clone() as Calendar
+                newDate.add(Calendar.DAY_OF_MONTH, 1)
+                onDateSelected(newDate)
             }) {
                 Icon(Icons.AutoMirrored.Default.KeyboardArrowRight, contentDescription = "Next")
             }
@@ -129,15 +135,16 @@ fun getFormattedDate(calendar: Calendar): String {
 }
 
 fun showDatePicker(
-    context: android.content.Context,
+    context: Context,
     calendar: Calendar,
-    onDateSelected: () -> Unit
+    onDateSelected: (Calendar) -> Unit
 ) {
     DatePickerDialog(
         context,
         { _, year, month, dayOfMonth ->
-            calendar.set(year, month, dayOfMonth)
-            onDateSelected()
+            val chosenCalendar = calendar.clone() as Calendar
+            chosenCalendar.set(year, month, dayOfMonth)
+            onDateSelected(chosenCalendar)
         },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),

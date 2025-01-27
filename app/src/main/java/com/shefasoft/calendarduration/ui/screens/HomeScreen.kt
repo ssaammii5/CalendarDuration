@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shefasoft.calendarduration.ui.components.DateSelector
@@ -18,15 +17,25 @@ import com.shefasoft.calendarduration.viewModel.MainViewModel
 
 @Composable
 fun HomeScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
-    val selectedDate = remember { mutableStateOf("") }
+    val selectedDate = viewModel.selectedDate.value
+
+    LaunchedEffect(selectedDate) {
+        viewModel.loadCalendarEvents()
+    }
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        DateSelector{ date ->
-            selectedDate.value = date
-        }
+        DateSelector(
+            // Pass the latest date directly
+            selectedDate = selectedDate,
+            onDateSelected = { newDate ->
+                viewModel.updateSelectedDate(newDate)
+            }
+        )
+
         TimeTrackingCard(
             viewModel = viewModel
         )

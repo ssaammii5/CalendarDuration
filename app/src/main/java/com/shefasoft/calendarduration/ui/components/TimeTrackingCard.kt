@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,10 +21,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.R
+import com.shefasoft.calendarduration.model.CalendarEvent
 import com.shefasoft.calendarduration.viewModel.MainViewModel
+import com.shefasoft.calendarduration.viewModel.UiState
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun TimeTrackingCard(viewModel: MainViewModel) {
+    val uiState = viewModel.uiState.value
+
+    val calendarEventGroups = remember(uiState) {
+        if (uiState is UiState.ShowEventsList) {
+            uiState.events.groupBy { it.calendarName }
+        } else {
+            emptyMap<String, List<CalendarEvent>>()
+        }
+    }
+
+    val totalDuration = remember(calendarEventGroups) {
+        calendarEventGroups.values.flatten().sumOf { event ->
+            // This snippet is just an example of parsing "yyyy-MM-dd HH:mm:ss".
+            // Make sure your CalendarEvent startTime / endTime match that format.
+            try {
+                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val startMillis = format.parse(event.startTime)?.time ?: 0
+                val endMillis = format.parse(event.endTime)?.time ?: 0
+                endMillis - startMillis // in ms
+            } catch (e: Exception) {
+                0
+            }
+        }
+    }
+
+    // Convert totalDuration from milliseconds to hours/minutes as a string
+    val (hours, minutes) = remember(totalDuration) {
+        val totalMinutes = totalDuration / (1000 * 60)
+        Pair(totalMinutes / 60, totalMinutes % 60)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -34,7 +70,7 @@ fun TimeTrackingCard(viewModel: MainViewModel) {
     ) {
         // Total Time Display
         Text(
-            text = "5 hr, 30 min",
+            text = "$hours hr, $minutes min",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
@@ -82,11 +118,33 @@ fun TimeTrackingCard(viewModel: MainViewModel) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Activity List with Dividers
-        ActivityItemWithDivider(color = Color.Blue, name = "Activity", events = 5, time = "9h 45m")
-        ActivityItemWithDivider(color = Color(0xFF388E3C), name = "Study", events = 2, time = "7h 30m")
-        ActivityItemWithDivider(color = Color.Gray, name = "Procrastination", events = 1, time = "5h 15m")
-        ActivityItemWithDivider(color = Color.Red, name = "Programming", events = 2, time = "4h 30m")
+        calendarEventGroups.forEach { (calendarName, events) ->
+            // Optionally compute the total time for these events alone
+            val calendarDuration = events.sumOf { event ->
+                try {
+                    val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                    val startMillis = format.parse(event.startTime)?.time ?: 0
+                    val endMillis = format.parse(event.endTime)?.time ?: 0
+                    endMillis - startMillis
+                } catch (e: Exception) {
+                    0
+                }
+            }
+            val minutesForCalendar = calendarDuration / (1000 * 60)
+            val hoursForCalendar = minutesForCalendar / 60
+            val leftoverMinutes = minutesForCalendar % 60
+
+            val colorInt = events.firstOrNull()?.color ?: 0xFF000000.toInt() // fallback if empty
+            val color = Color(colorInt)
+
+            // Render a row, similar to your existing ActivityItem pattern
+            ActivityItemWithDivider(
+                color = color,             // Could assign color by calendar
+                name = calendarName,           // The calendar name
+                events = events.size,          // Number of events in this calendar
+                time = "${hoursForCalendar}h ${leftoverMinutes}m" // Sum of durations
+            )
+        }
     }
 }
 
