@@ -147,7 +147,7 @@ fun TimeTrackingCard(viewModel: MainViewModel) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp)
+                        .heightIn(max = 300.dp)
                 ) {
                     AlertDialogEvents(events = events)
                 }
