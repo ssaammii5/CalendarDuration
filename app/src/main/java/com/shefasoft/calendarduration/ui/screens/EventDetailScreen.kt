@@ -33,7 +33,7 @@ fun EventDetailsScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) 
                 viewModel.updateSelectedDate(newDate)
             }
         )
-        TimeTrackingLine()
+        TimeTrackingLine(viewModel = viewModel)
         when (uiState) {
             is UiState.ShowEventsList -> {
                 EventActivityCard(events = uiState.events)

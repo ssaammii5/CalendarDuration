@@ -1,4 +1,4 @@
-package com.shefasoft.calendarduration.ui.components
+package com.shefasoft.calendarduration.ui.components.homeScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,18 +17,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.R
 import com.shefasoft.calendarduration.model.CalendarEvent
+import com.shefasoft.calendarduration.ui.components.EventActivityCard
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun EventActivityCard(events: List<CalendarEvent>) {
+fun AlertDialogEvents(events: List<CalendarEvent>) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(Color.White, shape = MaterialTheme.shapes.medium)
-            .padding(16.dp),
+            .fillMaxWidth(),
+            //.padding(16.dp)
+            //.background(Color.White, shape = MaterialTheme.shapes.medium)
+            //.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(events.size) { index ->

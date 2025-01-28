@@ -9,17 +9,22 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shefasoft.calendarduration.viewModel.MainViewModel
 
 
 @Composable
-fun TimeTrackingLine(){
+fun TimeTrackingLine(viewModel: MainViewModel){
+    val selectedDate = viewModel.selectedDate.value
+    val dateText = remember(selectedDate.timeInMillis) {
+        getFormattedDate(selectedDate)
+    }
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -31,7 +36,7 @@ fun TimeTrackingLine(){
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text(text = "Tue, Nov 5, 2024")
+            Text(text = dateText)
 
             Row (
                 verticalAlignment = Alignment.CenterVertically
@@ -105,8 +110,8 @@ fun TaskDurationBarChartExample() {
     TaskDurationBarChart(tasks = tasks, colors = colors)
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TimeTrackingLinePreview() {
-    TimeTrackingLine()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TimeTrackingLinePreview() {
+//    TimeTrackingLine()
+//}
