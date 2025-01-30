@@ -148,5 +148,10 @@ fun calculateDuration(startTime: String, endTime: String): String {
 
     val hours = duration.toHours()
     val minutes = duration.toMinutes() % 60
-    return "${hours}h ${minutes}m"
+    val formattedTime = if (hours > 0) {
+        "${hours}h ${minutes}m"
+    } else {
+        "${minutes}m"
+    }
+    return formattedTime
 }

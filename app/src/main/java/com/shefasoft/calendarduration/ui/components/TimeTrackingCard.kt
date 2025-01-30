@@ -121,6 +121,12 @@ fun TimeTrackingCard(viewModel: MainViewModel) {
             val hoursForCalendar = minutesForCalendar / 60
             val leftoverMinutes = minutesForCalendar % 60
 
+            val formattedTime = if (hoursForCalendar > 0) {
+                "${hoursForCalendar}h ${leftoverMinutes}m"
+            } else {
+                "${leftoverMinutes}m"
+            }
+
             val colorInt = events.firstOrNull()?.color ?: 0xFF000000.toInt() // fallback if empty
             val color = Color(colorInt)
 
@@ -129,7 +135,7 @@ fun TimeTrackingCard(viewModel: MainViewModel) {
                 color = color,             // Could assign color by calendar
                 name = calendarName,           // The calendar name
                 events = events.size,          // Number of events in this calendar
-                time = "${hoursForCalendar}h ${leftoverMinutes}m", // Sum of durations
+                time = formattedTime, // Sum of durations
                 onClick = {
                     selectedCalendarEvents = events
                 }

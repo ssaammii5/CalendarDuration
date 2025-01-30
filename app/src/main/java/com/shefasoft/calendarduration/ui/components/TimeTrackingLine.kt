@@ -17,31 +17,42 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.viewModel.MainViewModel
-
+import com.shefasoft.calendarduration.viewModel.UiState
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
-fun TimeTrackingLine(viewModel: MainViewModel){
+fun TimeTrackingLine(viewModel: MainViewModel) {
     val selectedDate = viewModel.selectedDate.value
     val dateText = remember(selectedDate.timeInMillis) {
         getFormattedDate(selectedDate)
     }
-    Column (
+
+    // Get the total duration from events
+    val totalDurationMinutes = remember(viewModel.uiState.value) {
+        calculateTotalDuration(viewModel)
+    }
+
+    // Format duration into "Xh Ym"
+    val formattedDuration = formatDuration(totalDurationMinutes)
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(text = dateText)
 
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "4h 30m", fontSize = 14.sp)
+                Text(text = formattedDuration, fontSize = 14.sp) // Dynamic Duration
                 Spacer(modifier = Modifier.width(2.dp))
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForward,
@@ -52,39 +63,62 @@ fun TimeTrackingLine(viewModel: MainViewModel){
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        TaskDurationBarChartExample()
-
+        TaskDurationBarChartExample(viewModel = viewModel)
     }
 }
 
+// Function to calculate total duration in minutes
+fun calculateTotalDuration(viewModel: MainViewModel): Int {
+    val uiState = viewModel.uiState.value
+    return if (uiState is UiState.ShowEventsList) {
+        uiState.events.sumOf { event ->
+            try {
+                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val startMillis = format.parse(event.startTime)?.time ?: return@sumOf 0
+                val endMillis = format.parse(event.endTime)?.time ?: return@sumOf 0
+                ((endMillis - startMillis) / (1000 * 60)).toInt() // Convert milliseconds to minutes
+            } catch (e: Exception) {
+                0
+            }
+        }
+    } else {
+        0
+    }
+}
+
+// Function to format duration into "Xh Ym"
+fun formatDuration(totalMinutes: Int): String {
+    val hours = totalMinutes / 60
+    val minutes = totalMinutes % 60
+    return when {
+        hours > 0 && minutes > 0 -> "${hours}h ${minutes}m"
+        hours > 0 -> "${hours}h"
+        else -> "${minutes}m"
+    }
+}
 
 @Composable
 fun TaskDurationBarChart(
-    tasks: List<Pair<String, Float>>, // List of tasks with their duration in hours
-    colors: List<Color> // List of colors for each task segment
+    tasks: List<Pair<String, Float>>, // Task data
+    colors: List<Color> // Associated colors
 ) {
-    // Calculate total duration manually
-    val totalHours = tasks.fold(0f) { sum, task -> sum + task.second }
+    val totalHours = tasks.sumOf { it.second.toDouble() }.toFloat() // Explicit type conversion
+    if (totalHours == 0f) return // Prevent division by zero
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(4.dp) // Set the height of the entire bar
+            .height(4.dp)
     ) {
         tasks.forEachIndexed { index, task ->
-            val taskDuration = task.second
-            val taskProportion = taskDuration / totalHours // Calculate the width proportionally
-
-            // Each task segment in the bar with rounded corners
+            val taskProportion = task.second / totalHours
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(taskProportion) // Width based on duration proportion
-                    .clip(RoundedCornerShape(5.dp)) // Rounded corners
-                    .background(colors[index % colors.size]) // Cycle through colors if needed
+                    .weight(taskProportion)
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(colors[index % colors.size])
             )
-
-            // Add a 2dp space between segments, except after the last segment
             if (index < tasks.size - 1) {
                 Spacer(modifier = Modifier.width(2.5.dp))
             }
@@ -93,25 +127,45 @@ fun TaskDurationBarChart(
 }
 
 @Composable
-fun TaskDurationBarChartExample() {
-    val tasks = listOf(
-        "Task 1" to 9f,  // Task that took 9 hours
-        "Task 2" to 7f,  // Task that took 7 hours
-        "Task 3" to 4f,  // Task that took 4 hours
-        "Task 4" to 3f,  // Task that took 3 hours
-        "Task 5" to 1f,   // Task that took 1 hour
-        "Task 6" to 1f   // Task that took 1 hour
-    )
+fun TaskDurationBarChartExample(viewModel: MainViewModel) {
+    val uiState = viewModel.uiState.value
+    val allTasks = remember(uiState) {
+        if (uiState is UiState.ShowEventsList) {
+            uiState.events.flatMap { event ->
+                try {
+                    val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                    val startMillis = format.parse(event.startTime)?.time ?: return@flatMap emptyList<Pair<String, Float>>()
+                    val endMillis = format.parse(event.endTime)?.time ?: return@flatMap emptyList<Pair<String, Float>>()
+                    listOf(event.title to (endMillis - startMillis) / (1000 * 60 * 60).toFloat())
+                } catch (e: Exception) {
+                    emptyList()
+                }
+            }
+        } else {
+            emptyList()
+        }
+    }
 
-    val colors = listOf(
-        Color.Blue, Color.Green, Color.Red, Color.Yellow, Color.Magenta, Color.Cyan
-    )
+    val colors = remember(uiState) {
+        if (uiState is UiState.ShowEventsList) {
+            uiState.events.map {
+                val colorInt = it.color ?: 0xFF000000.toInt() // Default to black if color is null or invalid
+                Color(colorInt)
+            }
+        } else {
+            emptyList<Color>()
+        }
+    }
 
-    TaskDurationBarChart(tasks = tasks, colors = colors)
+    if (allTasks.isNotEmpty()) {
+        TaskDurationBarChart(
+            tasks = allTasks,
+            colors = colors
+        )
+    }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun TimeTrackingLinePreview() {
-//    TimeTrackingLine()
-//}
+fun getFormattedDate(selectedDate: java.util.Date): String {
+    val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return format.format(selectedDate)
+}

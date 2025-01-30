@@ -47,9 +47,3 @@ fun EventDetailsScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) 
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewEventDetailsScreen(){
-//    EventDetailsScreen()
-//}

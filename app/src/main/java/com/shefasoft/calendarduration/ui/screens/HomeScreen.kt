@@ -39,7 +39,9 @@ fun HomeScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
         TimeTrackingCard(
             viewModel = viewModel
         )
-        TimeGridMatrix()
+        TimeGridMatrix(
+            viewModel = viewModel
+        )
         Spacer(Modifier.padding(vertical = 16.dp))
     }
 }
