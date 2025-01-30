@@ -102,15 +102,17 @@ fun TimeGridMatrix(viewModel: MainViewModel) {
                                 val (eventStartRow, eventStartCol) = getGridRowColForTime(event.startTime)
                                 val (eventEndRow, eventEndCol) = getGridRowColForTime(event.endTime)
 
-                                // Check if current grid cell (row, col) is within the event range
+                                // Fix: Adjust range check to prevent an extra cell being taken
                                 val isInTimeRange = when {
                                     eventStartCol == eventEndCol -> {
                                         // Event is within the same hour
-                                        col == eventStartCol && row in eventStartRow..eventEndRow
+                                        col == eventStartCol && row in eventStartRow until eventEndRow // Changed ".." to "until"
                                     }
                                     eventStartCol < eventEndCol -> {
-                                        // Event is within the same day but spans multiple hours
-                                        (col == eventStartCol && row >= eventStartRow) || (col == eventEndCol && row <= eventEndRow) || (col in (eventStartCol + 1)..(eventEndCol - 1))
+                                        // Event spans multiple hours within the same day
+                                        (col == eventStartCol && row >= eventStartRow) ||
+                                                (col == eventEndCol && row < eventEndRow) ||  // Changed "<=" to "<"
+                                                (col in (eventStartCol + 1)..(eventEndCol - 1))
                                     }
                                     else -> {
                                         // Event spans across midnight (next day)
@@ -118,7 +120,7 @@ fun TimeGridMatrix(viewModel: MainViewModel) {
                                     }
                                 }
 
-                                // If within range, mark this grid cell with the event's color
+                                // If within range, return the event's color, otherwise default to gray
                                 isInTimeRange
                             }?.let { event ->
                                 Color(event.color ?: 0xFF000000.toInt())
@@ -132,8 +134,6 @@ fun TimeGridMatrix(viewModel: MainViewModel) {
                                 .background(colorForCell)
                         )
                     }
-
-
                 }
             }
 
