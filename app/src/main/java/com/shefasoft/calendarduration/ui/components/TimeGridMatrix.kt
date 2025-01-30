@@ -102,23 +102,27 @@ fun TimeGridMatrix(viewModel: MainViewModel) {
                                 val (eventStartRow, eventStartCol) = getGridRowColForTime(event.startTime)
                                 val (eventEndRow, eventEndCol) = getGridRowColForTime(event.endTime)
 
-                                // Handle events spanning midnight (if needed)
-                                val isSameDayEvent = eventStartCol <= eventEndCol
-                                val isInTimeRange = if (isSameDayEvent) {
-                                    col in eventStartCol..eventEndCol
-                                } else {
-                                    col >= eventStartCol || col <= eventEndCol
+                                // Check if current grid cell (row, col) is within the event range
+                                val isInTimeRange = when {
+                                    eventStartCol == eventEndCol -> {
+                                        // Event is within the same hour
+                                        col == eventStartCol && row in eventStartRow..eventEndRow
+                                    }
+                                    eventStartCol < eventEndCol -> {
+                                        // Event is within the same day but spans multiple hours
+                                        (col == eventStartCol && row >= eventStartRow) || (col == eventEndCol && row <= eventEndRow) || (col in (eventStartCol + 1)..(eventEndCol - 1))
+                                    }
+                                    else -> {
+                                        // Event spans across midnight (next day)
+                                        col >= eventStartCol || col <= eventEndCol
+                                    }
                                 }
 
-                                isInTimeRange && (
-                                        (col == eventStartCol && row >= eventStartRow && (isSameDayEvent || eventStartCol > eventEndCol)) ||
-                                                (col == eventEndCol && row < eventEndRow && (isSameDayEvent || eventStartCol > eventEndCol)) ||
-                                                (if (isSameDayEvent) col in (eventStartCol + 1) until eventEndCol
-                                                else col > eventStartCol || col < eventEndCol)
-                                        )
+                                // If within range, mark this grid cell with the event's color
+                                isInTimeRange
                             }?.let { event ->
                                 Color(event.color ?: 0xFF000000.toInt())
-                            } ?: Color(0xFFE0E0E0)
+                            } ?: Color(0xFFE0E0E0) // Default gray color
                         }
 
                         Box(

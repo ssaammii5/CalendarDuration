@@ -117,7 +117,7 @@ object CalendarUtils {
             CalendarContract.Events.DESCRIPTION,
             CalendarContract.Events.EVENT_LOCATION,
             CalendarContract.Events.CALENDAR_ID,
-            CalendarContract.Events.ALL_DAY // Add ALL_DAY field to the projection
+            CalendarContract.Events.ALL_DAY // Ensure ALL_DAY is included
         )
 
         val calendarIdPlaceholders = selectedCalendars.joinToString(",") { "?" }
@@ -139,7 +139,7 @@ object CalendarUtils {
             projection,
             selection,
             selectionArgs.toTypedArray(),
-            "${CalendarContract.Events.DTSTART} DESC"
+            "${CalendarContract.Events.DTSTART} ASC"
         )
 
         cursor?.let {
@@ -161,18 +161,22 @@ object CalendarUtils {
                     val calendarId = it.getLong(calendarIdIndex)
                     val isAllDay = it.getInt(allDayIndex) == 1
 
-                    // Skip all-day events
+                    // Skip all-day events based on the ALL_DAY flag
                     if (isAllDay) continue
 
-                    // Alternatively, we can check if start and end times are set to midnight (which is a sign of an all-day event)
+                    // Convert start and end times to Calendar objects for time checks
                     val startCalendar = Calendar.getInstance().apply { timeInMillis = startTime }
                     val endCalendar = Calendar.getInstance().apply { timeInMillis = endTime }
 
-                    val isTimedEvent = startCalendar.get(Calendar.HOUR_OF_DAY) != 0 ||
-                            endCalendar.get(Calendar.HOUR_OF_DAY) != 0
+                    val startHour = startCalendar.get(Calendar.HOUR_OF_DAY)
+                    val startMinute = startCalendar.get(Calendar.MINUTE)
+                    val endHour = endCalendar.get(Calendar.HOUR_OF_DAY)
+                    val endMinute = endCalendar.get(Calendar.MINUTE)
 
-                    // Skip all-day events by checking if both start and end times are midnight
-                    if (!isTimedEvent) continue
+                    // Ensure we are not mistakenly filtering out events that start at 12:00 AM
+                    val isValidTimedEvent = !(startHour == 0 && startMinute == 0 && endHour == 0 && endMinute == 0)
+
+                    if (!isValidTimedEvent) continue // Skip full-day events with start and end at midnight
 
                     val startDate = Date(startTime)
                     val endDate = Date(endTime)
@@ -200,5 +204,6 @@ object CalendarUtils {
 
         return eventList
     }
+
 
 }
