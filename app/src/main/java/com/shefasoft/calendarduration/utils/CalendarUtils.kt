@@ -108,23 +108,6 @@ object CalendarUtils {
             }
         }
 
-        // === NEW: Compute today's start and end times ===
-        val calendar = Calendar.getInstance()
-        // Start of day
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val startOfDay = calendar.timeInMillis
-
-        // End of day
-        calendar.set(Calendar.HOUR_OF_DAY, 23)
-        calendar.set(Calendar.MINUTE, 59)
-        calendar.set(Calendar.SECOND, 59)
-        calendar.set(Calendar.MILLISECOND, 999)
-        val endOfDay = calendar.timeInMillis
-        // ================================================
-
         val uri = CalendarContract.Events.CONTENT_URI
         val projection = arrayOf(
             CalendarContract.Events._ID,
@@ -133,20 +116,18 @@ object CalendarUtils {
             CalendarContract.Events.DTEND,
             CalendarContract.Events.DESCRIPTION,
             CalendarContract.Events.EVENT_LOCATION,
-            CalendarContract.Events.CALENDAR_ID
+            CalendarContract.Events.CALENDAR_ID,
+            CalendarContract.Events.ALL_DAY // Add ALL_DAY field to the projection
         )
 
         val calendarIdPlaceholders = selectedCalendars.joinToString(",") { "?" }
 
-        /**
-         * CHANGED:
-         * Added additional conditions to fetch only events between startOfDay and endOfDay.
-         */
+        // Modified selection query: This gets all events between startTime and endTime
         val selection = """
-            ${CalendarContract.Events.CALENDAR_ID} IN ($calendarIdPlaceholders)
-            AND ${CalendarContract.Events.DTSTART} >= ?
-            AND ${CalendarContract.Events.DTSTART} <= ?
-        """.trimIndent()
+        ${CalendarContract.Events.CALENDAR_ID} IN ($calendarIdPlaceholders)
+        AND ${CalendarContract.Events.DTSTART} >= ? 
+        AND ${CalendarContract.Events.DTSTART} <= ?
+    """.trimIndent()
 
         val selectionArgs = selectedCalendars.map { it.toString() } + listOf(
             startTime.toString(),
@@ -169,6 +150,7 @@ object CalendarUtils {
                 val descriptionIndex = it.getColumnIndex(CalendarContract.Events.DESCRIPTION)
                 val locationIndex = it.getColumnIndex(CalendarContract.Events.EVENT_LOCATION)
                 val calendarIdIndex = it.getColumnIndex(CalendarContract.Events.CALENDAR_ID)
+                val allDayIndex = it.getColumnIndex(CalendarContract.Events.ALL_DAY)
 
                 do {
                     val title = it.getString(titleIndex) ?: "No Title"
@@ -177,6 +159,20 @@ object CalendarUtils {
                     val description = it.getString(descriptionIndex)
                     val location = it.getString(locationIndex)
                     val calendarId = it.getLong(calendarIdIndex)
+                    val isAllDay = it.getInt(allDayIndex) == 1
+
+                    // Skip all-day events
+                    if (isAllDay) continue
+
+                    // Alternatively, we can check if start and end times are set to midnight (which is a sign of an all-day event)
+                    val startCalendar = Calendar.getInstance().apply { timeInMillis = startTime }
+                    val endCalendar = Calendar.getInstance().apply { timeInMillis = endTime }
+
+                    val isTimedEvent = startCalendar.get(Calendar.HOUR_OF_DAY) != 0 ||
+                            endCalendar.get(Calendar.HOUR_OF_DAY) != 0
+
+                    // Skip all-day events by checking if both start and end times are midnight
+                    if (!isTimedEvent) continue
 
                     val startDate = Date(startTime)
                     val endDate = Date(endTime)
@@ -204,4 +200,5 @@ object CalendarUtils {
 
         return eventList
     }
+
 }
