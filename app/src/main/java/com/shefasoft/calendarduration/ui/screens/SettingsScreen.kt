@@ -92,13 +92,13 @@ fun ProfileScreen(viewModel: MainViewModel) {
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "Import Calendars",
+                        text = "Reset the configuration",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "Number of Calendars: 5",
+                        text = "Press here ->",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -115,7 +115,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text(text = "Reselect")
+                    Text(text = "Reset")
                 }
             }
         }
