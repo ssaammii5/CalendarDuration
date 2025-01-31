@@ -170,6 +170,7 @@ fun MainNavFlow(viewModel: MainViewModel) {
             }
             composable<Destinations.SettingsScreen> {
                 SettingsScreen(
+                    viewModel = viewModel,
                     modifier = Modifier
                         .padding(innerPadding)
                 )

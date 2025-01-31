@@ -37,18 +37,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shefasoft.calendarduration.R
+import com.shefasoft.calendarduration.viewModel.MainViewModel
 
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
+fun SettingsScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
-        ProfileScreen()
+        ProfileScreen(viewModel)
     }
 }
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(viewModel: MainViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,7 +105,9 @@ fun ProfileScreen() {
                 }
                 // Log Out Button
                 Button(
-                    onClick = { /* Handle Logout */ },
+                    onClick = {
+                        viewModel.reselect()
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -112,7 +115,7 @@ fun ProfileScreen() {
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text(text = "Import")
+                    Text(text = "Reselect")
                 }
             }
         }
