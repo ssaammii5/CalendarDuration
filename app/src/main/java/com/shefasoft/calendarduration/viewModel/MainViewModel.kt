@@ -24,21 +24,28 @@ class MainViewModel(private val repository: CalendarRepository) : ViewModel() {
     }
 
     private suspend fun checkAndProceed() {
-        val savedEmail = repository.getSelectedEmail()
-        val savedCalendars = repository.getSelectedCalendars()
+        try {
+            val savedEmail = repository.getSelectedEmail()
+            val savedCalendars = repository.getSelectedCalendars()
 
-        if (savedEmail != null && savedCalendars.isNotEmpty()) {
-            loadCalendarEvents()
-        } else {
-            val emails = repository.getAvailableEmails()
-            if (emails.isNotEmpty()) {
-                uiState.value = UiState.ShowEmailSelection(emails)
+            if (savedEmail != null && savedCalendars.isNotEmpty()) {
+                loadCalendarEvents()
             } else {
-                uiState.value = UiState.ShowError(
-                    title = "No Emails Found",
-                    message = "No calendar accounts found on this device."
-                )
+                val emails = repository.getAvailableEmails()
+                if (emails.isNotEmpty()) {
+                    uiState.value = UiState.ShowEmailSelection(emails)
+                } else {
+                    uiState.value = UiState.ShowError(
+                        title = "Permission Required",
+                        message = "Calendar access is needed to view events."
+                    )
+                }
             }
+        } catch (e: Exception) {
+            uiState.value = UiState.ShowError(
+                title = "Error",
+                message = "Failed to access calendar data: ${e.localizedMessage}"
+            )
         }
     }
 

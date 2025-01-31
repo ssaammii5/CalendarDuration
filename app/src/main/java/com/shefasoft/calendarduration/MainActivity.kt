@@ -17,6 +17,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -80,14 +81,22 @@ class MainActivity : ComponentActivity() {
 
                 // Check and request permission on first composition
                 LaunchedEffect(Unit) {
-                    val hasPermission = ContextCompat.checkSelfPermission(
-                        this@MainActivity,
-                        Manifest.permission.READ_CALENDAR
-                    ) == PackageManager.PERMISSION_GRANTED
-                    if (hasPermission) {
-                        viewModel.handlePermissionResult(true)
-                    } else {
-                        permissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+                    when {
+                        ContextCompat.checkSelfPermission(
+                            this@MainActivity,
+                            Manifest.permission.READ_CALENDAR
+                        ) == PackageManager.PERMISSION_GRANTED -> {
+                            viewModel.handlePermissionResult(true)
+                        }
+                        ActivityCompat.shouldShowRequestPermissionRationale(
+                            this@MainActivity,
+                            Manifest.permission.READ_CALENDAR
+                        ) -> {
+                            // Show custom rationale UI if needed
+                        }
+                        else -> {
+                            permissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+                        }
                     }
                 }
 
@@ -123,8 +132,11 @@ class MainActivity : ComponentActivity() {
                             title = uiState.title,
                             message = uiState.message,
                             onDismiss = {
-                                // Reset to loading or handle accordingly
-                                viewModel.reselect()
+                                if (uiState is UiState.ShowError && uiState.title == "Permission Denied") {
+                                    finish() // Close app if permission is critical
+                                } else {
+                                    viewModel.reselect()
+                                }
                             }
                         )
                     }
