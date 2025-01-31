@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -66,7 +67,7 @@ fun TimeTrackingCard(viewModel: MainViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .background(Color.White, shape = MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -259,7 +260,7 @@ fun ActivityItemWithDivider(color: Color, name: String, events: Int, time: Strin
     Column(modifier = Modifier.clickable { onClick() }) {
         ActivityItem(color = color, name = name, events = events, time = time)
         HorizontalDivider(
-            color = Color.LightGray,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
             thickness = 1.dp,
             modifier = Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp)
         )
@@ -299,13 +300,14 @@ fun ActivityItem(color: Color, name: String, events: Int, time: String) {
 
 @Composable
 fun SimpleRotatedText(text: String) {
+    val textColor = MaterialTheme.colorScheme.onSurface.toArgb()
     Canvas(
         modifier = Modifier
             .height(100.dp)
             .width(30.dp)
     ) {
         val paint = Paint().asFrameworkPaint().apply {
-            color = android.graphics.Color.BLACK
+            color = textColor
             textSize = 18.sp.toPx()
             isAntiAlias = true
             textAlign = android.graphics.Paint.Align.CENTER

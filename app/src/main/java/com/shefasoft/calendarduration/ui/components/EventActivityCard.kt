@@ -1,6 +1,7 @@
 package com.shefasoft.calendarduration.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -27,15 +28,16 @@ fun EventActivityCard(events: List<CalendarEvent>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .background(Color.White, shape = MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(events.size) { index ->
             val event = events[index]
             val duration = calculateDuration(event.startTime, event.endTime)
+            val eventColor = if (isSystemInDarkTheme()) Color(event.color ?: 0).copy(alpha = 0.8f) else Color(event.color ?: 0)
             EAItemWithDivider(
-                color = Color(event.color ?: 0),
+                color = eventColor,
                 name = event.title,
                 calendarName = event.calendarName,
                 time = duration,
@@ -60,7 +62,7 @@ fun EAItemWithDivider(
             timeframe = timeframe
         )
         HorizontalDivider(
-            color = Color.LightGray,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
             thickness = 1.dp,
             modifier = Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp)
         )
@@ -87,7 +89,7 @@ fun EventActivityItem(
         Column(modifier = Modifier.weight(1f)) {
             Text(text = name, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            Text(text = calendar_name, fontSize = 14.sp, color = Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(text = calendar_name, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Column(
             horizontalAlignment = Alignment.End
@@ -107,7 +109,7 @@ fun EventActivityItem(
                 text = timeframe,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
