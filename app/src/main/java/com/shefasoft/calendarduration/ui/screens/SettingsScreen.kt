@@ -3,7 +3,9 @@ package com.shefasoft.calendarduration.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,7 +59,8 @@ fun ProfileScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .background(MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -92,22 +94,22 @@ fun ProfileScreen() {
                         text = "Import Calendars",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Number of Calendars: 5",
                         fontSize = 14.sp,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 // Log Out Button
                 Button(
                     onClick = { /* Handle Logout */ },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
-                        contentColor = Color.Red
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     ),
-                    border = BorderStroke(1.dp, Color.Red),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(20.dp)
                 ) {
                     Text(text = "Import")
@@ -121,14 +123,14 @@ fun ProfileScreen() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
                 .padding(16.dp)
         ) {
             Text(
                 text = "About",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(8.dp))
             // About Items
@@ -148,7 +150,7 @@ fun ProfileScreen() {
             Text(
                 text = "App version: 1.0.0",
                 fontSize = 12.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.outline
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -161,8 +163,9 @@ fun ProfileScreen() {
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
+                val logo = if (isSystemInDarkTheme()) R.drawable.shefasoft_svg_darkmode else R.drawable.shefasoft_svg
                 Image(
-                    painter = painterResource(id = R.drawable.shefasoft_svg),
+                    painter = painterResource(id = logo),
                     contentDescription = "My Image",
                     modifier = Modifier.size(51.dp)
                 )
@@ -184,20 +187,20 @@ fun AboutItem(icon: ImageVector, title: String) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.Gray,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = title,
             fontSize = 14.sp,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
-            tint = Color.Gray,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(16.dp)
         )
     }
