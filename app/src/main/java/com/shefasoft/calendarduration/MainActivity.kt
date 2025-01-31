@@ -1,12 +1,14 @@
 package com.shefasoft.calendarduration
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -14,7 +16,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,6 +51,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CalendarDurationTheme {
+                //StatusBar fixing
+                val isDarkTheme = isSystemInDarkTheme()
+                val context = LocalContext.current
+                val window = (context as? Activity)?.window
+
+                LaunchedEffect(isDarkTheme) {
+                    window?.let {
+                        WindowCompat.setDecorFitsSystemWindows(it, false)
+                        val windowInsetsController = WindowInsetsControllerCompat(it, it.decorView)
+
+                        // Apply correct status bar text/icon color
+                        windowInsetsController.isAppearanceLightStatusBars = !isDarkTheme
+                    }
+                }
+
 
                 // Observe your ViewModel’s UiState. Adjust as needed:
                 val uiState = viewModel.uiState.value
