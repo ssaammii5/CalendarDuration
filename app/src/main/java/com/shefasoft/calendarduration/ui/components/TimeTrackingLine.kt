@@ -4,9 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -54,12 +51,11 @@ fun TimeTrackingLine(viewModel: MainViewModel) {
             ) {
                 Text(text = formattedDuration, fontSize = 14.sp) // Dynamic Duration
                 Spacer(modifier = Modifier.width(2.dp))
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = "Arrow",
-                    tint = Color.Black,
-                    modifier = Modifier.size(14.dp)
-                )
+//                Icon(
+//                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+//                    contentDescription = "Arrow",
+//                    modifier = Modifier.size(14.dp)
+//                )
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
