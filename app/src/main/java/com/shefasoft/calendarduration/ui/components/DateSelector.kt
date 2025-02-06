@@ -17,6 +17,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -86,7 +87,7 @@ fun DateSelector(
                 fontSize = 18.sp,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .border(1.dp, Color.Black, RoundedCornerShape(50))
+                    .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(50))
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .clickable {
                         showDatePicker(

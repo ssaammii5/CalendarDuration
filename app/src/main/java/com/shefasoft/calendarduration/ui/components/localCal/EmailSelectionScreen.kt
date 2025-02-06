@@ -29,11 +29,6 @@ fun EmailSelectionScreen(
                 Text("OK")
             }
         },
-        dismissButton = {
-            TextButton(onClick = {}) {
-                Text("CANCEL")
-            }
-        },
         title = {
             Text("Select Email")
         },

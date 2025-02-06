@@ -1,7 +1,6 @@
 package com.shefasoft.calendarduration.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -17,11 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shefasoft.calendarduration.R
 import com.shefasoft.calendarduration.model.CalendarEvent
 import com.shefasoft.calendarduration.ui.components.homeScreen.AlertDialogEvents
 import com.shefasoft.calendarduration.viewModel.MainViewModel
@@ -286,11 +283,11 @@ fun ActivityItem(color: Color, name: String, events: Int, time: String) {
             Text(text = "Event: $events", fontSize = 12.sp, color = Color.Gray)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_clock_duration),
-                contentDescription = "Time Icon",
-                modifier = Modifier.size(16.dp)
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.ic_clock_duration),
+//                contentDescription = "Time Icon",
+//                modifier = Modifier.size(16.dp)
+//            )
 
             Spacer(modifier = Modifier.width(4.dp))
             Text(text = time, fontWeight = FontWeight.Bold)
