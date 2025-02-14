@@ -1,5 +1,7 @@
 package com.shefasoft.calendarduration.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -140,7 +143,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
             AboutItem(icon = Icons.Default.Share, title = "Share app")
             AboutItem(icon = Icons.Default.Star, title = "Rate app")
             AboutItem(icon = Icons.Default.Email, title = "Contact us")
-            AboutItem(icon = Icons.Default.CheckCircle, title = "Privacy Policy")
+            AboutItem(icon = Icons.Default.CheckCircle, title = "Privacy Policy", url = "https://sites.google.com/view/calendarduration/home")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -179,12 +182,18 @@ fun ProfileScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun AboutItem(icon: ImageVector, title: String) {
+fun AboutItem(icon: ImageVector, title: String, url: String? =null) {
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { /* Handle click */ },
+            .clickable {
+                url?.let {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                    context.startActivity(intent)
+                }
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

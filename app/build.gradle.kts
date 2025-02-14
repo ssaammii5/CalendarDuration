@@ -67,6 +67,7 @@ dependencies {
 
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.31.1-alpha")
 
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -4,11 +4,15 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -17,6 +21,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -26,6 +31,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.shefasoft.calendarduration.MainActivity.AdmobActivity.TAG
+import com.shefasoft.calendarduration.MainActivity.AdmobActivity.bannerID
 import com.shefasoft.calendarduration.ui.components.TopAppBarMenu
 import com.shefasoft.calendarduration.ui.components.localCal.CalendarSelectionScreen
 import com.shefasoft.calendarduration.ui.components.localCal.EmailSelectionScreen
@@ -44,6 +57,13 @@ class MainActivity : ComponentActivity() {
     private lateinit var viewModel: MainViewModel
 
     @OptIn(ExperimentalMaterial3Api::class)
+
+    object AdmobActivity {
+        //IDs only for testing purposes
+        val bannerID = "ca-app-pub-3940256099942544/9214589741"
+        val TAG = "MAINPAGE"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,6 +71,9 @@ class MainActivity : ComponentActivity() {
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
         setContent {
+            MobileAds.initialize(this) {
+                Log.d(TAG, "onCreate: initAds")
+            }
             CalendarDurationTheme {
                 //StatusBar fixing
                 val isDarkTheme = isSystemInDarkTheme()
@@ -88,12 +111,14 @@ class MainActivity : ComponentActivity() {
                         ) == PackageManager.PERMISSION_GRANTED -> {
                             viewModel.handlePermissionResult(true)
                         }
+
                         ActivityCompat.shouldShowRequestPermissionRationale(
                             this@MainActivity,
                             Manifest.permission.READ_CALENDAR
                         ) -> {
                             // Show custom rationale UI if needed
                         }
+
                         else -> {
                             permissionLauncher.launch(Manifest.permission.READ_CALENDAR)
                         }
@@ -105,6 +130,7 @@ class MainActivity : ComponentActivity() {
                     is UiState.Loading -> {
                         LoadingScreen()
                     }
+
                     is UiState.ShowEmailSelection -> {
                         EmailSelectionScreen(
                             emails = uiState.emails,
@@ -113,6 +139,7 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
+
                     is UiState.ShowCalendarSelection -> {
                         CalendarSelectionScreen(
                             calendars = uiState.calendars,
@@ -124,9 +151,11 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
+
                     is UiState.ShowEventsList -> {
                         MainNavFlow(viewModel = viewModel)
                     }
+
                     is UiState.ShowError -> {
                         ErrorDialog(
                             title = uiState.title,
@@ -158,6 +187,55 @@ fun MainNavFlow(viewModel: MainViewModel) {
         topBar = {
             TopAppBarMenu(navController)
         },
+        bottomBar = {
+            Column {
+                AndroidView(modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding(), factory = { context ->
+                    AdView(context).apply {
+                        setAdSize(AdSize.BANNER)
+                        adUnitId = bannerID
+                        loadAd(AdRequest.Builder().build())
+                        this.adListener = object : AdListener() {
+                            override fun onAdClicked() {
+                                Log.d(TAG, "onAdClicked: ")
+                                // Code to be executed when the user clicks on an ad.
+                            }
+
+                            override fun onAdClosed() {
+                                Log.d(TAG, "onAdClosed: ")
+                                // Code to be executed when the user is about to return
+                                // to the app after tapping on an ad.
+                            }
+
+                            override fun onAdFailedToLoad(adError: LoadAdError) {
+                                Log.d(TAG, "onAdFailedToLoad: $adError")
+                                // Code to be executed when an ad request fails.
+                            }
+
+                            override fun onAdImpression() {
+                                // Code to be executed when an impression is recorded
+                                // for an ad.
+                            }
+
+                            override fun onAdLoaded() {
+                                Log.d(TAG, "onAdLoaded: ")
+                                // Code to be executed when an ad finishes loading.
+                            }
+
+                            override fun onAdOpened() {
+                                Log.d(TAG, "onAdOpened: ")
+                                // Code to be executed when an ad opens an overlay that
+                                // covers the screen.
+                            }
+                        }
+                    }
+
+
+                })
+
+            }
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
