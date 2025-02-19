@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
     object AdmobActivity {
         //IDs only for testing purposes
-        val bannerID = "ca-app-pub-4965257593147321/2660280368"
+        val bannerID = "ca-app-pub-3940256099942544/9214589741"
         val TAG = "MAINPAGE"
     }
 

@@ -86,7 +86,7 @@ fun TimeGridMatrix(viewModel: MainViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 listOf("12:00 AM", "06:00 AM", "12:00 PM", "06:00 PM", "11:00 PM").forEach { time ->
-                    Text(text = time, fontSize = 12.sp, color = textColor.copy(alpha = 0.6f))
+                    Text(text = time, fontSize = 12.sp.nonScaledSp, color = textColor.copy(alpha = 0.6f))
                 }
             }
 
