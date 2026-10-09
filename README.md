@@ -295,25 +295,6 @@ Calendar Duration was engineered with a strict **Privacy-First** ethos:
 
 ---
 
-## 🗺️ Roadmap
-
-- [ ] **Weekly & Monthly Trend Analytics**: Aggregate view comparing duration trends across weeks and months.
-- [ ] **Custom Tagging & Categories**: Group multiple calendars or event keywords into custom productivity buckets.
-- [ ] **CSV / PDF Export**: Export duration reports for freelance billing and client time tracking.
-- [ ] **Home Screen Glanceable Widget**: Glance-based Jetpack Compose widget displaying today's total logged hours.
-- [ ] **Wear OS Companion**: Quick glance at remaining scheduled time directly from your smartwatch.
-
----
-
-## 👨‍💻 Author & Contact
-
-**Sami**  
-- GitHub: [@ssaammii5](https://github.com/ssaammii5)  
-- Organization: **Shefasoft**  
-- Privacy Policy: [Calendar Duration Privacy Policy](https://sites.google.com/view/calendarduration/home)
-
----
-
 ## 📄 License
 
 This project is licensed under the [Apache License 2.0](LICENSE) - see the LICENSE file for details.
