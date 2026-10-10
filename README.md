@@ -16,6 +16,8 @@
 
 **A modern, privacy-focused Android productivity app that transforms standard calendar events into visual time analytics, duration summaries, and 24-hour timeline heatmaps.**
 
+[Overview](#-overview--problem-statement) •
+[Screenshots](#-app-preview--screenshots) •
 [Key Features](#-key-features) •
 [Architecture & Design](#-architecture--system-design) •
 [Technical Highlights](#-technical-deep-dive) •
@@ -40,29 +42,43 @@ Users managing multi-calendar setups (e.g., Work, Side Projects, Deep Work, Fitn
 
 ---
 
+## 📱 App Preview & Screenshots
+
+<div align="center">
+
+| **1. Daily Analytics & Routine** | **2. 288-Cell Time Grid** | **3. Chronological Event Feed** | **4. Quick Date Navigation** |
+|:---:|:---:|:---:|:---:|
+| <img src="images/screen_1.png" width="220" alt="Track & Optimize Your Time – Daily Routine" /> | <img src="images/screen_2.png" width="220" alt="Detailed Time Tracking – 288-Cell Grid" /> | <img src="images/screen_3.png" width="220" alt="Plan Your Day Efficiently – Event Feed" /> | <img src="images/screen_4.png" width="220" alt="Select and Manage Days – Date Picker" /> |
+| **Track & Optimize**<br/>Total daily duration summary, category breakdown & interactive bar chart | **Visual Insights**<br/>288-cell 24-hour timeline matrix with 5-minute precision | **Plan Efficiently**<br/>Proportional 24h progress bar & chronological event schedule | **Manage with Ease**<br/>Single-tap day stepper & interactive Material 3 date picker |
+
+</div>
+
+---
+
 ## ✨ Key Features
 
 ### ⏱️ Real-Time Duration Aggregation
-- Automatically calculates and sums precise elapsed time (`X hr, Y min`) for all events scheduled across selected calendars for any chosen date.
-- Real-time date navigation with single-tap day stepper and date picker dialog.
+- Automatically calculates and sums precise elapsed time (`X hr, Y min`) for all events scheduled across selected calendars for any chosen date *(e.g., 24h total tally in [Screen 1](images/screen_1.png))*.
+- Instant date navigation with single-tap previous/next day steppers and an interactive calendar picker dialog *([Screen 4](images/screen_4.png))*.
 - Pull-to-refresh integration for immediate calendar sync.
 
 ### 🧩 288-Cell 24-Hour Time Grid Matrix
-- Custom-built visual day timeline broken down into **288 discrete blocks** (24 hour columns $\times$ 12 five-minute rows).
-- Each cell dynamically reflects scheduled events with 5-minute precision, mapped to the native calendar color.
+- Custom-built visual day timeline broken down into **288 discrete blocks** (24 hour columns $\times$ 12 five-minute rows) *([Screen 2](images/screen_2.png))*.
+- Each cell dynamically reflects scheduled events with 5-minute precision, color-coded directly to its native calendar category.
 - Robust boundary logic handling single-hour blocks, multi-hour spans, and cross-midnight event transitions.
 
 ### 📊 Category-Based Interactive Bar Chart
-- Displays proportional time commitments across calendars with dynamic Y-axis hour scaling.
+- Displays proportional time commitments across calendars with dynamic Y-axis hour scaling *([Screen 1](images/screen_1.png))*.
 - Interactive bars: tap on any calendar bar to launch an event breakdown dialog listing all sub-events.
 - Native Canvas rotated text rendering for clean, compact date labels.
 
 ### 📏 Proportional Time Tracking Line
-- Continuous segmented horizontal visualizer showing the exact percentage distribution of your schedule.
-- Instant visual sense of workload balance between tasks throughout the day.
+- Continuous segmented horizontal visualizer showing the exact percentage distribution of your schedule across the 24-hour day *([Screen 3](images/screen_3.png))*.
+- Instant visual sense of workload balance and category distribution between tasks throughout the day.
 
 ### 📋 Detailed Event Activity Feed
-- Chronological breakdown of events with formatted timeframes (`10:00 AM - 12:00 PM`), calculated durations (`2h 30m`), and color indicators.
+- Chronological breakdown of events with formatted timeframes (`10:00 AM - 12:00 PM`), calculated durations (`2h 30m`), and color indicators *([Screen 3](images/screen_3.png))*.
+- Displays calendar tags (e.g. *Activity*, *Sleep*, *Exercise*, *University*) alongside individual event titles.
 - Graceful truncation and responsive typography avoiding layout shifts on small screens.
 
 ### ⚙️ Multi-Account & Multi-Calendar Filtering
@@ -278,7 +294,7 @@ CalendarDuration/
 5. **Deploy to Device:**
    Connect your Android device with USB debugging enabled, then run:
    ```bash
-   ./gradlew installDebug
+   ./gradlew installDebug:
    ```
 
 ---
